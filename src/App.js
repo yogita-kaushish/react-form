@@ -2,10 +2,14 @@ import "./App.css";
 import { React, useState } from "react";
 
 function App() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [contact, setContact] = useState("");
-  const [email, setEmail] = useState("");
+  const formFields = ["FirstName", "LastName", "Contact", "Email"];
+
+  const [formvalues, setFormvalues] = useState({
+    FirstName: "",
+    LastName: "",
+    Contact: "",
+    Email: "",
+  });
   const [gender, setGender] = useState("male");
   const [subjects, setSubjects] = useState({
     english: true,
@@ -18,10 +22,10 @@ function App() {
   const [about, setAbout] = useState("");
 
   const handleReset = () => {
-    setFirstName("");
-    setLastName("");
-    setContact("");
-    setEmail("");
+    setFormvalues({FirstName: "",
+      LastName: "",
+      Contact: "",
+      Email: "",})
     setGender("");
     setSubjects({
       english: true,
@@ -37,9 +41,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(
-      firstName,
-      lastName,
-      contact,
+      formvalues,
       gender,
       selectedOption,
       subjects,
@@ -47,6 +49,14 @@ function App() {
       url,
       about
     );
+  };
+
+  const handleOnclick = (name, value) => {
+    console.log(name, value);
+    setFormvalues({
+      ...formvalues,
+      [name]: value,
+    });
   };
 
   const handleSubjectChange = (sub) => {
@@ -61,46 +71,19 @@ function App() {
         <h1>Form in ReactJS</h1>
         <fieldset>
           <form action="#" method="get">
-            <label htmlFor="firstname">First Name:</label>
-            <input
-              type="text"
-              name="firstname"
-              id="firstname"
-              placeholder="Enter FirstName"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-            />
-            <label htmlFor="lastname">Last Name:</label>
-            <input
-              type="text"
-              name="lastname"
-              id="lastname"
-              placeholder="Enter LastName"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-            />
-            <label htmlFor="contact">Contact</label>
-            <input
-              type="tel"
-              name="contact"
-              id="contact"
-              placeholder="Enter your mobile Number"
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
-              required
-            />
-            <label htmlFor="email">Enter your Email :</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            {formFields.map((field, index) => (
+              <>
+                <label htmlFor={field}>{field}:</label>
+                <input
+                  type="text"
+                  name={field}
+                  id={field}
+                  placeholder={`Enter ${field}`}
+                  value={formvalues[field]}
+                  onChange={(e) => handleOnclick(field, e.target.value)}
+                />
+              </>
+            ))}
             {/* RadioButtons */}
             <label htmlFor="gender">Gender :</label>
             <input
